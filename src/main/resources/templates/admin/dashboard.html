@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - Forno a Legna</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="logo">
+                    <h1>Forno a Legna - Admin</h1>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/admin" class="active">Dashboard</a></li>
+                    <li><a href="/admin/pizze">Gestisci Pizze</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Dashboard Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Pannello Amministratore</h2>
+            
+            <div class="admin-dashboard">
+                <div class="dashboard-card">
+                    <h3>Gestione Pizze</h3>
+                    <p>Aggiungi, modifica o elimina pizze dal menu</p>
+                    <a href="/admin/pizze" class="btn-primary">Vai alla gestione</a>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3>Ordini</h3>
+                    <p>Visualizza e gestisci gli ordini dei clienti</p>
+                    <a href="#" class="btn-primary">Prossimamente</a>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3>Statistiche</h3>
+                    <p>Analizza le vendite e le performance</p>
+                    <a href="#" class="btn-primary">Prossimamente</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Forno a Legna - Tutti i diritti riservati</p>
+        </div>
+    </footer>
+</body>
+</html>

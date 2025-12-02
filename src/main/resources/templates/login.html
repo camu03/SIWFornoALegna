@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Forno a Legna</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="logo">
+                    <h1>Forno a Legna</h1>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/menu">Menu</a></li>
+                    <li><a href="#chi-siamo">Chi Siamo</a></li>
+                    <li><a href="#contatti">Contatti</a></li>
+                    <li><a href="/login" class="active">Login</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Login Section -->
+    <section class="section">
+        <div class="container">
+            <div class="login-container">
+                <h2 class="section-title">Accedi</h2>
+                
+                <!-- Messaggio di errore se login fallisce -->
+                <div th:if="${param.error}" class="error-message">
+                    Username o password non corretti
+                </div>
+                
+                <!-- Messaggio di successo dopo registrazione -->
+                <div th:if="${param.logout}" class="success-message">
+                    Logout effettuato con successo
+                </div>
+                
+                <form th:action="@{/login}" method="post" class="login-form">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">Accedi</button>
+                </form>
+                
+                <p class="register-link">
+                    Non hai un account? <a href="/register">Registrati qui</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Forno a Legna - Tutti i diritti riservati</p>
+        </div>
+    </footer>
+</body>
+</html>

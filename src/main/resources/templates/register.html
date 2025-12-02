@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrazione - Forno a Legna</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="logo">
+                    <h1>Forno a Legna</h1>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/menu">Menu</a></li>
+                    <li><a href="#chi-siamo">Chi Siamo</a></li>
+                    <li><a href="#contatti">Contatti</a></li>
+                    <li><a href="/login">Login</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Register Section -->
+    <section class="section">
+        <div class="container">
+            <div class="login-container">
+                <h2 class="section-title">Registrati</h2>
+                
+                <form th:action="@{/register}" method="post" th:object="${user}" class="login-form">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" th:field="*{username}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" th:field="*{email}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" th:field="*{password}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Tipo di account</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="role" value="USER" th:field="*{role}" required>
+                                Utente
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="role" value="ADMIN" th:field="*{role}">
+                                Amministratore
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">Registrati</button>
+                </form>
+                
+                <p class="register-link">
+                    Hai già un account? <a href="/login">Accedi qui</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Forno a Legna - Tutti i diritti riservati</p>
+        </div>
+    </footer>
+</body>
+</html>
