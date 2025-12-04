@@ -19,7 +19,30 @@
                     <li><a href="/menu" class="active">Menu</a></li>
                     <li><a href="/#chi-siamo">Chi Siamo</a></li>
                     <li><a href="/#contatti">Contatti</a></li>
-                    <li><a href="/login">Login</a></li>
+                    
+                    <!-- Mostra Login solo se NON autenticato -->
+                    <li th:if="${!isAuthenticated}">
+                        <a href="/login">Login</a>
+                    </li>
+                    
+                    <!-- Mostra Admin solo se autenticato come ADMIN -->
+                    <li th:if="${isAuthenticated and isAdmin}">
+                        <a href="/admin/pizze">Admin</a>
+                    </li>
+                    
+                    <!-- Mostra username e Logout se autenticato -->
+                    <li th:if="${isAuthenticated}">
+                        <span style="color: white; margin-right: 10px;">
+                            Benvenuto, <span th:text="${username}"></span>
+                        </span>
+                    </li>
+                    <li th:if="${isAuthenticated}">
+                        <form th:action="@{/logout}" method="post" style="display: inline;">
+                            <button type="submit" style="background: none; border: none; color: white; cursor: pointer; font-size: 16px;">
+                                Logout
+                            </button>
+                        </form>
+                    </li>
                 </ul>
             </div>
         </nav>
