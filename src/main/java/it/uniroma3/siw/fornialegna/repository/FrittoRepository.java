@@ -9,4 +9,5 @@ import java.util.List;
 public interface FrittoRepository extends JpaRepository<Fritto, Long> {
     List<Fritto> findAllByOrderByNomeAsc();
     List<Fritto> findAllByOrderByPrezzoAsc();
+    List<Fritto> findByNomeStartingWithIgnoreCase(String nome);
 }

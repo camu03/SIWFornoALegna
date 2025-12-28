@@ -9,4 +9,5 @@ import java.util.List;
 public interface BibitaRepository extends JpaRepository<Bibita, Long> {
     List<Bibita> findAllByOrderByNomeAsc();
     List<Bibita> findAllByOrderByPrezzoAsc();
+    List<Bibita> findByNomeStartingWithIgnoreCase(String nome);
 }
