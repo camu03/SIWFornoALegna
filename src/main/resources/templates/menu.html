@@ -17,8 +17,7 @@
                 <ul class="nav-menu">
                     <li><a href="/">Home</a></li>
                     <li><a href="/menu" class="active">Menu</a></li>
-                    <li><a href="/#chi-siamo">Chi Siamo</a></li>
-                    <li><a href="/#contatti">Contatti</a></li>
+                   
                     
                     <!-- Mostra Login solo se NON autenticato -->
                     <li th:if="${!isAuthenticated}">
@@ -48,10 +47,137 @@
         </nav>
     </header>
 
-    <div class="pizza-grid">
-    <div th:each="pizza : ${pizze}" class="pizza-card">
-        <h3 th:text="${pizza.nome}">Nome Pizza</h3>
-        <p th:text="${pizza.descrizione}">Descrizione</p>
-        <span class="prezzo" th:text="'€ ' + ${pizza.prezzo}">€ 0.00</span>
-    </div>
-</div>
+    <!-- Barra di Ricerca -->
+    <section class="section" style="padding: 40px 0 20px 0;">
+        <div class="container">
+            <form method="get" action="/menu" style="max-width: 600px; margin: 0 auto;">
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" 
+                           name="search" 
+                           th:value="${search}"
+                           placeholder="Cerca nel menu (pizze, bibite, fritti)..." 
+                           style="flex: 1; padding: 12px 20px; border: 2px solid #c41e3a; border-radius: 25px; font-size: 16px;">
+                    <button type="submit" 
+                            class="btn-primary" 
+                            style="padding: 12px 30px; border-radius: 25px; white-space: nowrap;">
+                        Cerca
+                    </button>
+                    <a th:if="${search != null and !search.isEmpty()}" 
+                       href="/menu" 
+                       class="btn-primary" 
+                       style="padding: 12px 30px; border-radius: 25px; background: #666; text-decoration: none; display: inline-block;">
+                        Reset
+                    </a>
+                </div>
+            </form>
+            <p th:if="${search != null and !search.isEmpty()}" 
+               style="text-align: center; margin-top: 20px; color: #666;">
+                Risultati per: "<span th:text="${search}"></span>"
+            </p>
+        </div>
+    </section>
+
+    <!-- Bottoni Ordinamento -->
+    <section style="padding: 20px 0;">
+        <div class="container" style="max-width: 600px; margin: 0 auto;">
+            <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                <button onclick="window.location.href='?sortedByName=true'" 
+                        class="btn-primary">
+                    Ordina per Nome
+                </button>
+                <button onclick="window.location.href='?sortedByPrice=true'" 
+                        class="btn-primary">
+                    Ordina per Prezzo
+                </button>
+                <button onclick="window.location.href='/menu'" 
+                        class="btn-primary" 
+                        style="background: #666;">
+                    Reset Ordinamento
+                </button>
+            </div>
+            <p th:if="${currentSort != null}" 
+               style="text-align: center; margin-top: 15px; font-weight: bold; color: #c41e3a;">
+                Ordinato per <span th:text="${currentSort}"></span>
+            </p>
+        </div>
+    </section>
+
+
+    <!-- Sezione PIZZE -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title" style="text-align: center; margin-bottom: 20px;">PIZZE</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">
+                Totale pizze: <span th:text="${totalePizze}" style="font-weight: bold; color: #c41e3a;"></span>
+            </p>
+           
+            <div class="pizza-grid">
+                <div th:each="pizza : ${pizze}" class="pizza-card">
+                    <img th:if="${pizza.immagine != null}" 
+                         th:src="@{/pizze/immagine/{id}(id=${pizza.id})}" 
+                         th:alt="${pizza.nome}"
+                         style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px 10px 0 0; margin-bottom: 15px;">
+                    <h3 th:text="${pizza.nome}">Nome Pizza</h3>
+                    <p th:text="${pizza.descrizione}">Descrizione</p>
+                    <span class="prezzo" th:text="'€ ' + ${pizza.prezzo}">€ 0.00</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Linea Divisoria -->
+    <hr style="border: 0; height: 2px; background: #c41e3a; margin: 50px auto; width: 80%; max-width: 1200px;">
+    
+    <!-- Sezione BIBITE -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title" style="text-align: center; margin-bottom: 40px;">BIBITE</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">
+                Totale bibite: <span th:text="${totaleBibite}" style="font-weight: bold; color: #c41e3a;"></span>
+            </p>
+            <div class="pizza-grid">
+                <div th:each="bibita : ${bibite}" class="bibita-card">
+                    <img th:if="${bibita.immagine != null}" 
+                         th:src="@{/bibite/immagine/{id}(id=${bibita.id})}" 
+                         th:alt="${bibita.nome}"
+                         style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px 10px 0 0; margin-bottom: 15px;">
+                    <h3 th:text="${bibita.nome}">Nome Bibita</h3>
+                    <p th:text="${bibita.descrizione}">Descrizione</p>
+                    <span class="prezzo" th:text="'€ ' + ${bibita.prezzo}">€ 0.00</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Linea Divisoria -->
+    <hr style="border: 0; height: 2px; background: #c41e3a; margin: 50px auto; width: 80%; max-width: 1200px;">
+    
+    <!-- Sezione FRITTI -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title" style="text-align: center; margin-bottom: 40px;">FRITTI</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 30px;">
+                Totale fritti: <span th:text="${totaleFritti}" style="font-weight: bold; color: #c41e3a;"></span>
+            </p>
+            <div class="pizza-grid">
+                <div th:each="fritto : ${fritti}" class="pizza-card">
+                    <img th:if="${fritto.immagine != null}" 
+                         th:src="@{/fritti/immagine/{id}(id=${fritto.id})}" 
+                         th:alt="${fritto.nome}"
+                         style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px 10px 0 0; margin-bottom: 15px;">
+                    <h3 th:text="${fritto.nome}">Nome Fritto</h3>
+                    <p th:text="${fritto.descrizione}">Descrizione</p>
+                    <span class="prezzo" th:text="'€ ' + ${fritto.prezzo}">€ 0.00</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Forno a Legna - Tutti i diritti riservati</p>
+        </div>
+    </footer>
+</body>
+</html>

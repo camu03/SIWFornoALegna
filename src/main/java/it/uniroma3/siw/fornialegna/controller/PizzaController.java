@@ -1,31 +1,37 @@
 package it.uniroma3.siw.fornialegna.controller;
 
 import it.uniroma3.siw.fornialegna.model.Pizza;
-import it.uniroma3.siw.fornialegna.repository.PizzaRepository;
+import it.uniroma3.siw.fornialegna.service.PizzaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/pizze")
+
+
+@Controller
 public class PizzaController {
 
     @Autowired
-    private PizzaRepository pizzaRepository;
+    private PizzaService pizzaService;
 
-    @GetMapping
-    public List<Pizza> getAllPizze() {
-        return pizzaRepository.findAll();
+    @GetMapping("/menu/pizze")
+    public List<Pizza> getAllPizze(@RequestParam(required = false, defaultValue = "false") boolean sortedByName,
+                                    @RequestParam(required = false, defaultValue = "false") boolean sortedByPrice) {
+       
+        if (sortedByName) {
+            return pizzaService.findAllSortedByNome();
+        } else if (sortedByPrice) {
+            return pizzaService.findAllSortedByPrezzo();
+        } else {
+            return pizzaService.findAll();
+        }
+      
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/menu/pizze/{id}")
     public Pizza getPizzaById(@PathVariable Long id) {
-        return pizzaRepository.findById(id).orElse(null);
+        return pizzaService.findById(id);
     }
 
-    @PostMapping
-    public Pizza createPizza(@RequestBody Pizza pizza) {
-        return pizzaRepository.save(pizza);
-    }
 }

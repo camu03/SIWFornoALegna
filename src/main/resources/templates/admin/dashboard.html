@@ -17,7 +17,11 @@
                 <ul class="nav-menu">
                     <li><a href="/">Home</a></li>
                     <li><a href="/admin" class="active">Dashboard</a></li>
-                    <li><a href="/logout">Logout</a></li>
+                    <li><form th:action="@{/logout}" method="post" style="display: inline;">
+                            <button type="submit" style="background: none; border: none; color: white; cursor: pointer; font-size: 16px;">
+                                Logout
+                            </button>
+                        </form></li>
                 </ul>
             </div>
         </nav>
@@ -31,20 +35,20 @@
             <div class="admin-dashboard">
                 <div class="dashboard-card">
                     <h3>Gestione Pizze</h3>
-                    <p>Aggiungi, modifica o elimina pizze dal menu</p>
+                    <p>Aggiungi, modifica o elimina Pizze dal menu</p>
                     <a href="/admin/pizze" class="btn-primary">Vai alla gestione</a>
                 </div>
                 
                 <div class="dashboard-card">
-                    <h3>Ordini</h3>
-                    <p>Visualizza e gestisci gli ordini dei clienti</p>
-                    <a href="#" class="btn-primary">Prossimamente</a>
+                    <h3>Gestione Bibite</h3>
+                    <p>Aggiungi, modifica o elimina Bibite dal menu</p>
+                    <a href="/admin/bibite" class="btn-primary">Vai alla gestione</a>
                 </div>
                 
                 <div class="dashboard-card">
-                    <h3>Statistiche</h3>
-                    <p>Analizza le vendite e le performance</p>
-                    <a href="#" class="btn-primary">Prossimamente</a>
+                    <h3>Gestione Fritti</h3>
+                    <p>Aggiungi, modifica o elimina Fritti dal menu</p>
+                    <a href="/admin/fritti" class="btn-primary">Vai alla gestione</a>
                 </div>
             </div>
         </div>

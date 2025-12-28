@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestione Pizze - Admin</title>
+    <title>Gestione Fritti - Admin</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -23,18 +23,18 @@
         </nav>
     </header>
 
-    <!-- Gestione Pizze Section -->
+    <!-- Gestione Fritti Section -->
     <section class="section">
         <div class="container">
-            <h2 class="section-title">Gestione Pizze</h2>
-            
-            <!-- Form Aggiungi Pizza -->
+            <h2 class="section-title">Gestione Fritti</h2>
+
+            <!-- Form Aggiungi Fritto -->
             <div class="admin-form-container">
-                <h3>Aggiungi Nuova Pizza</h3>
-                <form th:action="@{/admin/pizze/add}" method="post" th:object="${pizza}" 
+                <h3>Aggiungi Nuovo Fritto</h3>
+                <form th:action="@{/admin/fritti/add}" method="post" th:object="${fritto}" 
                       class="admin-form" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="nome">Nome Pizza</label>
+                        <label for="nome">Nome Fritto</label>
                         <input type="text" id="nome" th:field="*{nome}" required>
                     </div>
                     
@@ -49,18 +49,18 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="file">Immagine Pizza (opzionale)</label>
+                        <label for="file">Immagine Fritto (opzionale)</label>
                         <input type="file" id="file" name="file" accept="image/*">
                         <small style="color: #666;">Formati supportati: JPG, PNG. Max 5MB</small>
                     </div>
                     
-                    <button type="submit" class="btn-primary">Aggiungi Pizza</button>
+                    <button type="submit" class="btn-primary">Aggiungi Fritto</button>
                 </form>
             </div>
             
-            <!-- Lista Pizze -->
+            <!-- Lista Fritti -->
             <div class="admin-list-container">
-                <h3>Pizze nel Menu</h3>
+                <h3>Fritti nel Menu</h3>
                 <table class="admin-table">
                     <thead>
                         <tr>
@@ -73,28 +73,28 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="pizza : ${pizze}">
-                            <td th:text="${pizza.id}">1</td>
+                        <tr th:each="fritto : ${fritti}">
+                            <td th:text="${fritto.id}">1</td>
                             <td>
-                                <img th:if="${pizza.immagine != null}" 
-                                     th:src="@{/pizze/immagine/{id}(id=${pizza.id})}" 
-                                     alt="Immagine pizza"
+                                <img th:if="${fritto.immagine != null}" 
+                                     th:src="@{/fritti/immagine/{id}(id=${fritto.id})}" 
+                                     alt="Immagine fritto"
                                      style="width: 80px; height: 80px; object-fit: cover; border-radius: 5px;">
-                                <span th:if="${pizza.immagine == null}">Nessuna immagine</span>
+                                <span th:if="${fritto.immagine == null}">Nessuna immagine</span>
                             </td>
-                            <td th:text="${pizza.nome}">Margherita</td>
-                            <td th:text="${pizza.descrizione}">Descrizione</td>
-                            <td th:text="'€ ' + ${pizza.prezzo}">€ 6.00</td>
+                            <td th:text="${fritto.nome}">Coca Cola</td>
+                            <td th:text="${fritto.descrizione}">Descrizione</td>
+                            <td th:text="'€ ' + ${fritto.prezzo}">€ 2.00</td>
                             <td>
-                                <a th:href="@{/admin/pizze/delete/{id}(id=${pizza.id})}" 
+                                <a th:href="@{/admin/fritti/delete/{id}(id=${fritto.id})}" 
                                    class="btn-delete"
-                                   onclick="return confirm('Sei sicuro di voler eliminare questa pizza?')">
+                                   onclick="return confirm('Sei sicuro di voler eliminare questo fritto?')">
                                    Elimina
                                 </a>
                                 <button class="btn-edit"
-                                       th:attr="data-id=${pizza.id}, data-nome=${pizza.nome}, data-descrizione=${pizza.descrizione}, data-prezzo=${pizza.prezzo}"
-                                       onclick="openEditModal(this)">
-                                    Modifica
+                                        th:attr="data-id=${fritto.id}, data-nome=${fritto.nome}, data-descrizione=${fritto.descrizione}, data-prezzo=${fritto.prezzo}"
+                                        onclick="openEditModal(this)">
+                                   Modifica
                                 </button>
                             </td>
                         </tr>
@@ -104,15 +104,15 @@
         </div>
     </section>
 
-    <!-- Modal Modifica Pizza -->
-     <div id="editModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000;">
+    <!-- Modal Modifica Fritto -->
+    <div id="editModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
         <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 500px;">
-            <h3 style="margin-bottom: 20px; color: #c41e3a;">Modifica Pizza</h3>
-            <form th:action="@{/admin/pizze/update}" method="post" enctype="multipart/form-data">
+            <h3 style="margin-bottom: 20px; color: #c41e3a;">Modifica Fritto</h3>
+            <form th:action="@{/admin/fritti/update}" method="post" enctype="multipart/form-data">
                 <input type="hidden" id="editId" name="id">
                 
                 <div class="form-group">
-                    <label for="editNome">Nome Pizza</label>
+                    <label for="editNome">Nome Fritto</label>
                     <input type="text" id="editNome" name="nome" required>
                 </div>
                 
@@ -167,8 +167,7 @@
         }
     </script>
 
-
-    <!-- Footer -->
+     <!-- Footer -->
     <footer>
         <div class="container">
             <p>&copy; 2025 Forno a Legna - Tutti i diritti riservati</p>

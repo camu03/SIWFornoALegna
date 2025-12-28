@@ -40,7 +40,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Pagine pubbliche accessibili a tutti
                 .requestMatchers("/", "/home", "/menu", "/login", "/register", 
-                                "/css/**", "/js/**", "/images/**").permitAll()
+                                "/css/**", "/js/**", "/images/**", 
+                                "/pizze/immagine/**", "/bibite/immagine/**", "/fritti/immagine/**").permitAll()
                 // Area admin solo per amministratori
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 // Tutte le altre richieste richiedono autenticazione

@@ -3,8 +3,8 @@ package it.uniroma3.siw.fornialegna.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "pizze")
-public class Pizza {
+@Table(name = "bibite")
+public class Bibita {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,14 +20,14 @@ public class Pizza {
     private Double prezzo;
 
     @Lob
-    @Column(name = "immagine", columnDefinition = "bytea")
+    @Column(name = "immagine")
     private byte[] immagine;
 
     // Costruttori
-    public Pizza() {
+    public Bibita() {
     }
 
-    public Pizza(String nome, String descrizione, Double prezzo) {
+    public Bibita(String nome, String descrizione, Double prezzo) {
         this.nome = nome;
         this.descrizione = descrizione;
         this.prezzo = prezzo;
