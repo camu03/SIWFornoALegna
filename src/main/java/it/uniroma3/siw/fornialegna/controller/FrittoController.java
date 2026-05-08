@@ -27,7 +27,7 @@ public class FrittoController {
             return frittoService.findAll();
         }
     }
-
+    
     @GetMapping("/menu/fritti/{id}")
     public Fritto getFrittoById(@PathVariable Long id) {
         return frittoService.findById(id);

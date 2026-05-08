@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forno a Legna - Pizzeria Napoletana</title>
+    <title>Forno a Legna - Pizzeria Romana</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+    
     <!-- Header -->
     <header>
         <nav class="navbar">
@@ -112,13 +113,12 @@
             </p>
            
             <div class="pizza-grid">
-                <div th:each="pizza : ${pizze}" class="pizza-card">
+                <div th:each="pizza : ${pizze}" class="pizza-card" style="cursor: pointer;" onclick="openItemModal(this.dataset.nome, this.dataset.desc, this.dataset.img)" th:attr="data-nome=${pizza.nome}, data-desc=${pizza.descrizione}, data-img=${pizza.immagine != null ? '/pizze/immagine/' + pizza.id : ''}">
                     <img th:if="${pizza.immagine != null}" 
                          th:src="@{/pizze/immagine/{id}(id=${pizza.id})}" 
                          th:alt="${pizza.nome}"
                          style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px 10px 0 0; margin-bottom: 15px;">
                     <h3 th:text="${pizza.nome}">Nome Pizza</h3>
-                    <p th:text="${pizza.descrizione}">Descrizione</p>
                     <span class="prezzo" th:text="'€ ' + ${pizza.prezzo}">€ 0.00</span>
                 </div>
             </div>
@@ -136,13 +136,12 @@
                 Totale bibite: <span th:text="${totaleBibite}" style="font-weight: bold; color: #c41e3a;"></span>
             </p>
             <div class="pizza-grid">
-                <div th:each="bibita : ${bibite}" class="bibita-card">
+                <div th:each="bibita : ${bibite}" class="bibita-card" style="cursor: pointer;" onclick="openItemModal(this.dataset.nome, this.dataset.desc, this.dataset.img)" th:attr="data-nome=${bibita.nome}, data-desc=${bibita.descrizione}, data-img=${bibita.immagine != null ? '/bibite/immagine/' + bibita.id : ''}">
                     <img th:if="${bibita.immagine != null}" 
                          th:src="@{/bibite/immagine/{id}(id=${bibita.id})}" 
                          th:alt="${bibita.nome}"
                          style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px 10px 0 0; margin-bottom: 15px;">
                     <h3 th:text="${bibita.nome}">Nome Bibita</h3>
-                    <p th:text="${bibita.descrizione}">Descrizione</p>
                     <span class="prezzo" th:text="'€ ' + ${bibita.prezzo}">€ 0.00</span>
                 </div>
             </div>
@@ -160,18 +159,54 @@
                 Totale fritti: <span th:text="${totaleFritti}" style="font-weight: bold; color: #c41e3a;"></span>
             </p>
             <div class="pizza-grid">
-                <div th:each="fritto : ${fritti}" class="pizza-card">
+                <div th:each="fritto : ${fritti}" class="pizza-card" style="cursor: pointer;" onclick="openItemModal(this.dataset.nome, this.dataset.desc, this.dataset.img)" th:attr="data-nome=${fritto.nome}, data-desc=${fritto.descrizione}, data-img=${fritto.immagine != null ? '/fritti/immagine/' + fritto.id : ''}">
                     <img th:if="${fritto.immagine != null}" 
                          th:src="@{/fritti/immagine/{id}(id=${fritto.id})}" 
                          th:alt="${fritto.nome}"
                          style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px 10px 0 0; margin-bottom: 15px;">
                     <h3 th:text="${fritto.nome}">Nome Fritto</h3>
-                    <p th:text="${fritto.descrizione}">Descrizione</p>
                     <span class="prezzo" th:text="'€ ' + ${fritto.prezzo}">€ 0.00</span>
                 </div>
             </div>
         </div>
     </section>
+    
+    <!-- Modal Dettagli Elemento -->
+    <div id="itemDetailModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="position: relative; background: white; padding: 2rem; border-radius: 10px; width: 90%; max-width: 500px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto;">
+            <button onclick="closeItemModal()" style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999;">×</button>
+            
+            <img id="modalItemImage" src="" alt="Elemento" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem; background: #f0f0f0;">
+            
+            <h2 id="modalItemName" style="margin: 0 0 0.5rem 0; color: #c41e3a; font-size: 1.5rem;"></h2>
+            
+            <p id="modalItemDesc" style="margin: 0; color: #666; line-height: 1.6;"></p>
+            
+            <button onclick="closeItemModal()" class="btn-primary" style="margin-top: 1.5rem; width: 100%; padding: 0.75rem; border: none; cursor: pointer; font-size: 1rem; font-weight: 600;">Chiudi</button>
+        </div>
+    </div>
+
+    <script>
+        function openItemModal(itemName, itemDesc, imageUrl) {
+            var modal = document.getElementById('itemDetailModal');
+            document.getElementById('modalItemName').textContent = itemName;
+            document.getElementById('modalItemDesc').textContent = itemDesc;
+            document.getElementById('modalItemImage').src = imageUrl;
+            modal.style.display = 'flex';
+        }
+
+        function closeItemModal() {
+            var modal = document.getElementById('itemDetailModal');
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            var modal = document.getElementById('itemDetailModal');
+            if (event.target == modal) {
+                closeItemModal();
+            }
+        }
+    </script>
     
     <!-- Footer -->
     <footer>

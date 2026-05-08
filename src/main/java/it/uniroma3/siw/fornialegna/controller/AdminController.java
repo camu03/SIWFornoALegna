@@ -28,7 +28,10 @@ public class AdminController {
     private FrittoRepository frittoRepository;
 
     @GetMapping
-    public String adminDashboard() {
+    public String adminDashboard(Model model) {
+        model.addAttribute("totalePizze", pizzaRepository.count());
+        model.addAttribute("totaleBibite", bibitaRepository.count());
+        model.addAttribute("totaleFritti", frittoRepository.count());
         return "admin/dashboard";
     }
 
