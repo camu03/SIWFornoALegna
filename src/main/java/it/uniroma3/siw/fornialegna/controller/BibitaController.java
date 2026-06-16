@@ -1,6 +1,5 @@
 package it.uniroma3.siw.fornialegna.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import it.uniroma3.siw.fornialegna.service.BibitaService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class BibitaController {
     
-    @Autowired
-    private BibitaService bibitaService;
+    private final BibitaService bibitaService;
+
+    public BibitaController(BibitaService bibitaService) {
+        this.bibitaService = bibitaService;
+    }
 
     @GetMapping("/menu/bibite")
     public List<Bibita> getAllBibite(@RequestParam(required = false, defaultValue = "false") boolean sortedByName,

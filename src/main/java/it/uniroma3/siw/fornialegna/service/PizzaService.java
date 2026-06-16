@@ -1,42 +1,49 @@
 package it.uniroma3.siw.fornialegna.service;
 
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import it.uniroma3.siw.fornialegna.model.Pizza;
 import it.uniroma3.siw.fornialegna.repository.PizzaRepository;
 
 @Service
 public class PizzaService {
 
-    @Autowired
-    private PizzaRepository pizzaRepository;
-    
+    private final PizzaRepository pizzaRepository;
+
+    public PizzaService(PizzaRepository pizzaRepository) {
+        this.pizzaRepository = pizzaRepository;
+    }
+
+    @Transactional
     public Pizza save(Pizza pizza) {
         return pizzaRepository.save(pizza);
     }
 
+    @Transactional(readOnly = true)
     public Pizza findById(Long id) {
         return pizzaRepository.findById(id).orElse(null);
     }
 
+    @Transactional
     public void deleteById(Long id) {
         pizzaRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
     public List<Pizza> findAll() {
         return pizzaRepository.findAll();
     }
 
-    //metodo per ordinare le pizze per nome
-    public List<Pizza> findAllSortedByNome() {
-        return pizzaRepository.findAllByOrderByNomeAsc();
+    @Transactional(readOnly = true)
+    public long count() {
+        return pizzaRepository.count();
     }
 
-    //metodo per ordinaere le pizze per prezzo
-    public List<Pizza> findAllSortedByPrezzo() {
-        return pizzaRepository.findAllByOrderByPrezzoAsc();
+    //metodo ordina cresecente per nome
+    @Transactional(readOnly = true)
+    public List<Pizza> findAllByOrderByNomeAsc() {
+        return pizzaRepository.findAllByOrderByNomeAsc();
     }
 
 }

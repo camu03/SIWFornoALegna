@@ -6,7 +6,6 @@ import it.uniroma3.siw.fornialegna.model.Fritto;
 import it.uniroma3.siw.fornialegna.repository.PizzaRepository;
 import it.uniroma3.siw.fornialegna.repository.BibitaRepository;
 import it.uniroma3.siw.fornialegna.repository.FrittoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,14 +17,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Controller
 public class ImageController {
 
-    @Autowired
-    private PizzaRepository pizzaRepository;
-    
-    @Autowired
-    private BibitaRepository bibitaRepository;
-    
-    @Autowired
-    private FrittoRepository frittoRepository;
+    private final PizzaRepository pizzaRepository;
+    private final BibitaRepository bibitaRepository;
+    private final FrittoRepository frittoRepository;
+
+    public ImageController(PizzaRepository pizzaRepository, BibitaRepository bibitaRepository, FrittoRepository frittoRepository) {
+        this.pizzaRepository = pizzaRepository;
+        this.bibitaRepository = bibitaRepository;
+        this.frittoRepository = frittoRepository;
+    }
 
     @GetMapping("/pizze/immagine/{id}")
     public ResponseEntity<byte[]> getImmaginePizza(@PathVariable Long id) {

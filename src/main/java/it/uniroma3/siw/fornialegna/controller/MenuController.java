@@ -1,6 +1,5 @@
 package it.uniroma3.siw.fornialegna.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -14,19 +13,19 @@ import it.uniroma3.siw.fornialegna.repository.PizzaRepository;
 import it.uniroma3.siw.fornialegna.repository.BibitaRepository;
 import it.uniroma3.siw.fornialegna.repository.FrittoRepository;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class MenuController {
  
-    @Autowired
-    private PizzaRepository pizzaRepository;
-    
-    @Autowired
-    private BibitaRepository bibitaRepository;
-    
-    @Autowired
-    private FrittoRepository frittoRepository;
+    private final PizzaRepository pizzaRepository;
+    private final BibitaRepository bibitaRepository;
+    private final FrittoRepository frittoRepository;
+
+    public MenuController(PizzaRepository pizzaRepository, BibitaRepository bibitaRepository, FrittoRepository frittoRepository) {
+        this.pizzaRepository = pizzaRepository;
+        this.bibitaRepository = bibitaRepository;
+        this.frittoRepository = frittoRepository;
+    }
 
     @GetMapping("/menu")
     public String menu(@RequestParam(required = false) String search, Model model, 
@@ -37,44 +36,45 @@ public class MenuController {
         List<Bibita> bibite = bibitaRepository.findAll();
         List<Fritto> fritti = frittoRepository.findAll();
 
-        if(search != null && !search.trim().isEmpty()){
-            pizze = pizzaRepository.findByNomeStartingWithIgnoreCase(search);
-            bibite = bibitaRepository.findByNomeStartingWithIgnoreCase(search);
-            fritti = frittoRepository.findByNomeStartingWithIgnoreCase(search);
-        }
-        else{
-            pizze = pizzaRepository.findAll();
-            bibite = bibitaRepository.findAll();
-            fritti = frittoRepository.findAll();
-        }
+        // if(search != null && !search.trim().isEmpty()){
+        //     pizze = pizzaRepository.findByNomeStartingWithIgnoreCase(search);
+        //     bibite = bibitaRepository.findByNomeStartingWithIgnoreCase(search);
+        //     fritti = frittoRepository.findByNomeStartingWithIgnoreCase(search);
+        // }
+        // else{
+        //     pizze = pizzaRepository.findAll();
+        //     bibite = bibitaRepository.findAll();
+        //     fritti = frittoRepository.findAll();
+        // }
+
         
         //se è richiesto l'ordinamento, ordino le pizze per nome
-        if (sortedByName) {
-            pizze = pizze.stream()
-                .sorted((p1, p2) -> p1.getNome().compareToIgnoreCase(p2.getNome()))
-                .collect(Collectors.toList());
-            bibite = bibite.stream()
-                .sorted((p1, p2) -> p1.getNome().compareToIgnoreCase(p2.getNome()))
-                .collect(Collectors.toList());
-            fritti = fritti.stream()
-                .sorted((f1, f2) -> f1.getNome().compareToIgnoreCase(f2.getNome()))
-                .collect(Collectors.toList());  
-            model.addAttribute("currentSort", "nome");
-        }
+        // if (sortedByName) {
+        //     pizze = pizze.stream()
+        //         .sorted((p1, p2) -> p1.getNome().compareToIgnoreCase(p2.getNome()))
+        //         .collect(Collectors.toList());
+        //     bibite = bibite.stream()
+        //         .sorted((p1, p2) -> p1.getNome().compareToIgnoreCase(p2.getNome()))
+        //         .collect(Collectors.toList());
+        //     fritti = fritti.stream()
+        //         .sorted((f1, f2) -> f1.getNome().compareToIgnoreCase(f2.getNome()))
+        //         .collect(Collectors.toList());  
+        //     model.addAttribute("currentSort", "nome");
+        // }
 
         //se è richiesto l'ordinamento, ordino le pizze per prezzo
-        if (sortedByPrice) {
-            pizze = pizze.stream()
-                .sorted((p1, p2) -> p1.getPrezzo().compareTo(p2.getPrezzo()))
-                .collect(Collectors.toList());
-            bibite = bibite.stream()
-                .sorted((p1, p2) -> p1.getPrezzo().compareTo(p2.getPrezzo()))
-                .collect(Collectors.toList());
-            fritti = fritti.stream()
-                .sorted((f1, f2) -> f1.getPrezzo().compareTo(f2.getPrezzo()))
-                .collect(Collectors.toList());
-            model.addAttribute("currentSort", "prezzo");
-        }
+        // if (sortedByPrice) {
+        //     pizze = pizze.stream()
+        //         .sorted((p1, p2) -> p1.getPrezzo().compareTo(p2.getPrezzo()))
+        //         .collect(Collectors.toList());
+        //     bibite = bibite.stream()
+        //         .sorted((p1, p2) -> p1.getPrezzo().compareTo(p2.getPrezzo()))
+        //         .collect(Collectors.toList());
+        //     fritti = fritti.stream()
+        //         .sorted((f1, f2) -> f1.getPrezzo().compareTo(f2.getPrezzo()))
+        //         .collect(Collectors.toList());
+        //     model.addAttribute("currentSort", "prezzo");
+        // }
 
         model.addAttribute("search", search);
         model.addAttribute("pizze", pizze);
