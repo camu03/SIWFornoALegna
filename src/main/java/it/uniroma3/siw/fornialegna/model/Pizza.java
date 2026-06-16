@@ -1,6 +1,8 @@
 package it.uniroma3.siw.fornialegna.model;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "pizze")
@@ -22,6 +24,12 @@ public class Pizza {
     @Lob
     @Column(name = "immagine", columnDefinition = "bytea")
     private byte[] immagine;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "pizza_ingredienti",
+        joinColumns = @JoinColumn(name = "pizza_id"),
+        inverseJoinColumns = @JoinColumn(name = "ingrediente_id"))
+    private List<Ingrediente> ingredienti = new ArrayList<>();
 
     // Costruttori
     public Pizza() {
@@ -72,5 +80,13 @@ public class Pizza {
 
     public void setImmagine(byte[] immagine) {
         this.immagine = immagine;
+    }
+
+    public List<Ingrediente> getIngredienti() {
+        return ingredienti;
+    }
+
+    public void setIngredienti(List<Ingrediente> ingredienti) {
+        this.ingredienti = ingredienti;
     }
 }

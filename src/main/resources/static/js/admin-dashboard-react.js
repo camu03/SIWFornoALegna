@@ -13,6 +13,7 @@
     var pizzeCount = getNumber(rootElement.dataset.pizzeCount);
     var bibiteCount = getNumber(rootElement.dataset.bibiteCount);
     var frittiCount = getNumber(rootElement.dataset.frittiCount);
+    var ingredientiCount = getNumber(rootElement.dataset.ingredientiCount);
 
     var e = React.createElement;
 
@@ -137,6 +138,15 @@
           href: "/admin/fritti",
           accent: "linear-gradient(135deg, #f2994a, #f2c94c)",
           icon: "F",
+        },
+        {
+          key: "ingredienti",
+          title: "Gestione Ingredienti",
+          description: "Aggiungi o rimuovi ingredienti da associare alle pizze.",
+          count: ingredientiCount,
+          href: "/admin/ingredienti",
+          accent: "linear-gradient(135deg, #27ae60, #6fcf97)",
+          icon: "I",
         },
       ];
 

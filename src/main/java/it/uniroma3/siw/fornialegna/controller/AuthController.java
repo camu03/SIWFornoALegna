@@ -5,23 +5,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import it.uniroma3.siw.fornialegna.model.User;
-import it.uniroma3.siw.fornialegna.repository.UserRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
+import it.uniroma3.siw.fornialegna.service.UserService;
 
 @Controller
 public class AuthController {
-       
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public AuthController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+    private final UserService userService;
+
+    public AuthController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/login")
-    public String login(){
+    public String login() {
         return "login";
     }
 
@@ -33,14 +29,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public String registerUser(@ModelAttribute User user) {
-        // 1. Cripta la password
-        String passwordCriptata = passwordEncoder.encode(user.getPassword());
-        user.setPassword(passwordCriptata);
-        
-        // 2. Salva l'utente nel database
-        userRepository.save(user);
-        
-        // 3. Reindirizza al login
+        userService.registra(user);
         return "redirect:/login";
     }
 }

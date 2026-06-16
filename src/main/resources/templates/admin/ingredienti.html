@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione Ingredienti - Admin</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="logo">
+                    <h1>Forno a Legna - Admin</h1>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/admin">Dashboard</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Gestione Ingredienti</h2>
+
+            <!-- Form Aggiungi Ingrediente -->
+            <div class="admin-form-container">
+                <h3>Aggiungi Nuovo Ingrediente</h3>
+                <form th:action="@{/admin/ingredienti/add}" method="post"
+                      th:object="${ingrediente}" class="admin-form">
+                    <div class="form-group">
+                        <label for="nome">Nome Ingrediente</label>
+                        <input type="text" id="nome" th:field="*{nome}" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Aggiungi Ingrediente</button>
+                </form>
+            </div>
+
+            <!-- Lista Ingredienti -->
+            <div class="admin-list-container">
+                <h3>Ingredienti Disponibili</h3>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome</th>
+                            <th>Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="ing : ${ingredienti}">
+                            <td th:text="${ing.id}"></td>
+                            <td th:text="${ing.nome}"></td>
+                            <td>
+                                <form th:action="@{/admin/ingredienti/delete/{id}(id=${ing.id})}"
+                                      method="post" style="display: inline;">
+                                    <button type="submit" class="btn-delete"
+                                            onclick="return confirm('Eliminare questo ingrediente?')">
+                                        Elimina
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Forno a Legna - Tutti i diritti riservati</p>
+        </div>
+    </footer>
+</body>
+</html>

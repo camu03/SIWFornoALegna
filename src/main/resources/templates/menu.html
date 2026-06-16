@@ -108,17 +108,20 @@
     <section class="section">
         <div class="container">
             <h2 class="section-title" style="text-align: center; margin-bottom: 20px;">PIZZE</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 30px;">
-                Totale pizze: <span th:text="${totalePizze}" style="font-weight: bold; color: #c41e3a;"></span>
-            </p>
            
             <div class="pizza-grid">
-                <div th:each="pizza : ${pizze}" class="pizza-card" style="cursor: pointer;" onclick="openItemModal(this.dataset.nome, this.dataset.desc, this.dataset.img)" th:attr="data-nome=${pizza.nome}, data-desc=${pizza.descrizione}, data-img=${pizza.immagine != null ? '/pizze/immagine/' + pizza.id : ''}">
+                <div th:each="pizza : ${pizze}" class="pizza-card" style="cursor: pointer;" onclick="openItemModal(this.dataset.nome, this.dataset.desc, this.dataset.img, this.dataset.ingredienti)" th:attr="data-nome=${pizza.nome}, data-desc=${pizza.descrizione}, data-img=${pizza.immagine != null ? '/pizze/immagine/' + pizza.id : ''}, data-ingredienti=${#strings.listJoin(pizza.ingredienti.![nome], ', ')}">
                     <img th:if="${pizza.immagine != null}" 
                          th:src="@{/pizze/immagine/{id}(id=${pizza.id})}" 
                          th:alt="${pizza.nome}"
                          style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px 10px 0 0; margin-bottom: 15px;">
                     <h3 th:text="${pizza.nome}">Nome Pizza</h3>
+                    <p th:if="${not #lists.isEmpty(pizza.ingredienti)}"
+                       style="color: #666; font-size: 0.85rem; margin: 6px 0;">
+                        <span th:each="ing, stat : ${pizza.ingredienti}">
+                            <span th:text="${ing.nome}"></span><span th:unless="${stat.last}">, </span>
+                        </span>
+                    </p>
                     <span class="prezzo" th:text="'€ ' + ${pizza.prezzo}">€ 0.00</span>
                 </div>
             </div>
@@ -132,11 +135,9 @@
     <section class="section">
         <div class="container">
             <h2 class="section-title" style="text-align: center; margin-bottom: 40px;">BIBITE</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 30px;">
-                Totale bibite: <span th:text="${totaleBibite}" style="font-weight: bold; color: #c41e3a;"></span>
-            </p>
+        
             <div class="pizza-grid">
-                <div th:each="bibita : ${bibite}" class="bibita-card" style="cursor: pointer;" onclick="openItemModal(this.dataset.nome, this.dataset.desc, this.dataset.img)" th:attr="data-nome=${bibita.nome}, data-desc=${bibita.descrizione}, data-img=${bibita.immagine != null ? '/bibite/immagine/' + bibita.id : ''}">
+                <div th:each="bibita : ${bibite}" class="pizza-card" style="cursor: pointer;" onclick="openItemModal(this.dataset.nome, this.dataset.desc, this.dataset.img)" th:attr="data-nome=${bibita.nome}, data-desc=${bibita.descrizione}, data-img=${bibita.immagine != null ? '/bibite/immagine/' + bibita.id : ''}">
                     <img th:if="${bibita.immagine != null}" 
                          th:src="@{/bibite/immagine/{id}(id=${bibita.id})}" 
                          th:alt="${bibita.nome}"
@@ -155,9 +156,7 @@
     <section class="section">
         <div class="container">
             <h2 class="section-title" style="text-align: center; margin-bottom: 40px;">FRITTI</h2>
-            <p style="text-align: center; color: #666; margin-bottom: 30px;">
-                Totale fritti: <span th:text="${totaleFritti}" style="font-weight: bold; color: #c41e3a;"></span>
-            </p>
+            
             <div class="pizza-grid">
                 <div th:each="fritto : ${fritti}" class="pizza-card" style="cursor: pointer;" onclick="openItemModal(this.dataset.nome, this.dataset.desc, this.dataset.img)" th:attr="data-nome=${fritto.nome}, data-desc=${fritto.descrizione}, data-img=${fritto.immagine != null ? '/fritti/immagine/' + fritto.id : ''}">
                     <img th:if="${fritto.immagine != null}" 
@@ -179,7 +178,9 @@
             <img id="modalItemImage" src="" alt="Elemento" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem; background: #f0f0f0;">
             
             <h2 id="modalItemName" style="margin: 0 0 0.5rem 0; color: #c41e3a; font-size: 1.5rem;"></h2>
-            
+
+            <p id="modalItemIngredienti" style="margin: 0.4rem 0 0.8rem 0; color: #888; font-size: 0.85rem; font-style: italic;"></p>
+
             <p id="modalItemDesc" style="margin: 0; color: #666; line-height: 1.6;"></p>
             
             <button onclick="closeItemModal()" class="btn-primary" style="margin-top: 1.5rem; width: 100%; padding: 0.75rem; border: none; cursor: pointer; font-size: 1rem; font-weight: 600;">Chiudi</button>
@@ -187,11 +188,14 @@
     </div>
 
     <script>
-        function openItemModal(itemName, itemDesc, imageUrl) {
+        function openItemModal(itemName, itemDesc, imageUrl, ingredienti) {
             var modal = document.getElementById('itemDetailModal');
             document.getElementById('modalItemName').textContent = itemName;
             document.getElementById('modalItemDesc').textContent = itemDesc;
             document.getElementById('modalItemImage').src = imageUrl;
+            var ingEl = document.getElementById('modalItemIngredienti');
+            ingEl.textContent = ingredienti ? ingredienti : '';
+            ingEl.style.display = ingredienti ? 'block' : 'none';
             modal.style.display = 'flex';
         }
 

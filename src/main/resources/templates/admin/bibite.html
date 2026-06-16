@@ -86,11 +86,18 @@
                             <td th:text="${bibita.descrizione}">Descrizione</td>
                             <td th:text="'€ ' + ${bibita.prezzo}">€ 2.00</td>
                             <td>
-                                <a th:href="@{/admin/bibite/delete/{id}(id=${bibita.id})}" 
-                                   class="btn-delete"
-                                   onclick="return confirm('Sei sicuro di voler eliminare questa bibita?')">
-                                   Elimina
-                                </a>
+                                <form th:action="@{/admin/bibite/delete/{id}(id=${bibita.id})}"
+                                      method="post" style="display: inline;">
+                                    <button type="submit" class="btn-delete"
+                                            onclick="return confirm('Sei sicuro di voler eliminare questa bibita?')">
+                                        Elimina
+                                    </button>
+                                </form>
+                                <button class="btn-edit"
+                                        th:attr="data-id=${bibita.id}, data-nome=${bibita.nome}, data-descrizione=${bibita.descrizione}, data-prezzo=${bibita.prezzo}"
+                                        onclick="openEditModal(this)">
+                                   Modifica
+                                </button>
                             </td>
                         </tr>
                     </tbody>
@@ -98,6 +105,69 @@
             </div>
         </div>
     </section>
+
+    <!-- Modal Modifica Bibita -->
+    <div id="editModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 500px;">
+            <h3 style="margin-bottom: 20px; color: #c41e3a;">Modifica Bibita</h3>
+            <form th:action="@{/admin/bibite/update}" method="post" enctype="multipart/form-data">
+                <input type="hidden" id="editId" name="id">
+                
+                <div class="form-group">
+                    <label for="editNome">Nome Bibita</label>
+                    <input type="text" id="editNome" name="nome" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editDescrizione">Descrizione</label>
+                    <textarea id="editDescrizione" name="descrizione" rows="3" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editPrezzo">Prezzo (€)</label>
+                    <input type="number" id="editPrezzo" name="prezzo" step="0.01" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editFile">Cambia Immagine (opzionale)</label>
+                    <input type="file" id="editFile" name="file" accept="image/*">
+                    <small style="color: #666;">Lascia vuoto per mantenere l'immagine attuale</small>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="btn-primary">Salva Modifiche</button>
+                    <button type="button" class="btn-delete" onclick="closeEditModal()">Annulla</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openEditModal(button) {
+            var id = button.getAttribute('data-id');
+            var nome = button.getAttribute('data-nome');
+            var descrizione = button.getAttribute('data-descrizione');
+            var prezzo = button.getAttribute('data-prezzo');
+            
+            document.getElementById('editId').value = id;
+            document.getElementById('editNome').value = nome;
+            document.getElementById('editDescrizione').value = descrizione;
+            document.getElementById('editPrezzo').value = prezzo;
+            document.getElementById('editModal').style.display = 'block';
+        }
+        
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+        
+        // Chiudi il modal cliccando fuori
+        window.onclick = function(event) {
+            var modal = document.getElementById('editModal');
+            if (event.target == modal) {
+                closeEditModal();
+            }
+        }
+    </script>
 
      <!-- Footer -->
     <footer>

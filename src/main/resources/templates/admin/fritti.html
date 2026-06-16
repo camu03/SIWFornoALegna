@@ -82,15 +82,17 @@
                                      style="width: 80px; height: 80px; object-fit: cover; border-radius: 5px;">
                                 <span th:if="${fritto.immagine == null}">Nessuna immagine</span>
                             </td>
-                            <td th:text="${fritto.nome}">Coca Cola</td>
+                            <td th:text="${fritto.nome}">Crocchetta</td>
                             <td th:text="${fritto.descrizione}">Descrizione</td>
                             <td th:text="'€ ' + ${fritto.prezzo}">€ 2.00</td>
                             <td>
-                                <a th:href="@{/admin/fritti/delete/{id}(id=${fritto.id})}" 
-                                   class="btn-delete"
-                                   onclick="return confirm('Sei sicuro di voler eliminare questo fritto?')">
-                                   Elimina
-                                </a>
+                                <form th:action="@{/admin/fritti/delete/{id}(id=${fritto.id})}"
+                                      method="post" style="display: inline;">
+                                    <button type="submit" class="btn-delete"
+                                            onclick="return confirm('Sei sicuro di voler eliminare questo fritto?')">
+                                        Elimina
+                                    </button>
+                                </form>
                                 <button class="btn-edit"
                                         th:attr="data-id=${fritto.id}, data-nome=${fritto.nome}, data-descrizione=${fritto.descrizione}, data-prezzo=${fritto.prezzo}"
                                         onclick="openEditModal(this)">

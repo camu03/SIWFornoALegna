@@ -7,10 +7,13 @@ import org.springframework.web.multipart.MultipartFile;
 import it.uniroma3.siw.fornialegna.model.Pizza;
 import it.uniroma3.siw.fornialegna.model.Bibita;
 import it.uniroma3.siw.fornialegna.model.Fritto;
+import it.uniroma3.siw.fornialegna.model.Ingrediente;
 import it.uniroma3.siw.fornialegna.service.PizzaService;
 import it.uniroma3.siw.fornialegna.service.BibitaService;
 import it.uniroma3.siw.fornialegna.service.FrittoService;
+import it.uniroma3.siw.fornialegna.service.IngredienteService;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -20,11 +23,14 @@ public class AdminController {
     private final PizzaService pizzaService;
     private final BibitaService bibitaService;
     private final FrittoService frittoService;
+    private final IngredienteService ingredienteService;
 
-    public AdminController(PizzaService pizzaService, BibitaService bibitaService, FrittoService frittoService) {
+    public AdminController(PizzaService pizzaService, BibitaService bibitaService,
+                           FrittoService frittoService, IngredienteService ingredienteService) {
         this.pizzaService = pizzaService;
         this.bibitaService = bibitaService;
         this.frittoService = frittoService;
+        this.ingredienteService = ingredienteService;
     }
 
     @GetMapping
@@ -32,25 +38,30 @@ public class AdminController {
         model.addAttribute("totalePizze", pizzaService.count());
         model.addAttribute("totaleBibite", bibitaService.count());
         model.addAttribute("totaleFritti", frittoService.count());
+        model.addAttribute("totaleIngredienti", ingredienteService.count());
         return "admin/dashboard";
     }
 
-    // GESTIONE PIZZE
+    // ── GESTIONE PIZZE ────────────────────────────────────────────────
 
     @GetMapping("/pizze")
     public String gestisciPizze(Model model) {
-        List<Pizza> pizze = pizzaService.findAll();
-        model.addAttribute("pizze", pizze);
+        model.addAttribute("pizze", pizzaService.findAll());
         model.addAttribute("pizza", new Pizza());
+        model.addAttribute("tuttiGliIngredienti", ingredienteService.findAll());
         return "admin/pizze";
     }
 
     @PostMapping("/pizze/add")
     public String aggiungiPizza(@ModelAttribute Pizza pizza,
-                                @RequestParam(value = "file", required = false) MultipartFile file) {
+                                @RequestParam(value = "file", required = false) MultipartFile file,
+                                @RequestParam(value = "ingredientiIds", required = false) List<Long> ingredientiIds) {
         try {
             if (file != null && !file.isEmpty()) {
                 pizza.setImmagine(file.getBytes());
+            }
+            if (ingredientiIds != null) {
+                pizza.setIngredienti(ingredienteService.findAllByIds(ingredientiIds));
             }
             pizzaService.save(pizza);
         } catch (IOException e) {
@@ -60,7 +71,7 @@ public class AdminController {
         return "redirect:/admin/pizze";
     }
 
-    @GetMapping("/pizze/delete/{id}")
+    @PostMapping("/pizze/delete/{id}")
     public String eliminaPizza(@PathVariable Long id) {
         pizzaService.deleteById(id);
         return "redirect:/admin/pizze";
@@ -71,7 +82,8 @@ public class AdminController {
                                 @RequestParam String nome,
                                 @RequestParam String descrizione,
                                 @RequestParam Double prezzo,
-                                @RequestParam(value = "file", required = false) MultipartFile file) {
+                                @RequestParam(value = "file", required = false) MultipartFile file,
+                                @RequestParam(value = "ingredientiIds", required = false) List<Long> ingredientiIds) {
         try {
             Pizza pizza = pizzaService.findById(id);
             if (pizza == null) return "redirect:/admin/pizze?error=notfound";
@@ -84,6 +96,11 @@ public class AdminController {
                 pizza.setImmagine(file.getBytes());
             }
 
+            List<Ingrediente> ingredienti = (ingredientiIds != null)
+                    ? ingredienteService.findAllByIds(ingredientiIds)
+                    : new ArrayList<>();
+            pizza.setIngredienti(ingredienti);
+
             pizzaService.save(pizza);
         } catch (IOException e) {
             e.printStackTrace();
@@ -92,12 +109,11 @@ public class AdminController {
         return "redirect:/admin/pizze";
     }
 
-    // GESTIONE BIBITE
+    // ── GESTIONE BIBITE ───────────────────────────────────────────────
 
     @GetMapping("/bibite")
     public String gestisciBibite(Model model) {
-        List<Bibita> bibite = bibitaService.findAll();
-        model.addAttribute("bibite", bibite);
+        model.addAttribute("bibite", bibitaService.findAll());
         model.addAttribute("bibita", new Bibita());
         return "admin/bibite";
     }
@@ -117,7 +133,7 @@ public class AdminController {
         return "redirect:/admin/bibite";
     }
 
-    @GetMapping("/bibite/delete/{id}")
+    @PostMapping("/bibite/delete/{id}")
     public String eliminaBibita(@PathVariable Long id) {
         bibitaService.deleteById(id);
         return "redirect:/admin/bibite";
@@ -149,12 +165,11 @@ public class AdminController {
         return "redirect:/admin/bibite";
     }
 
-    // GESTIONE FRITTI
+    // ── GESTIONE FRITTI ───────────────────────────────────────────────
 
     @GetMapping("/fritti")
     public String gestisciFritti(Model model) {
-        List<Fritto> fritti = frittoService.findAll();
-        model.addAttribute("fritti", fritti);
+        model.addAttribute("fritti", frittoService.findAll());
         model.addAttribute("fritto", new Fritto());
         return "admin/fritti";
     }
@@ -174,7 +189,7 @@ public class AdminController {
         return "redirect:/admin/fritti";
     }
 
-    @GetMapping("/fritti/delete/{id}")
+    @PostMapping("/fritti/delete/{id}")
     public String eliminaFritto(@PathVariable Long id) {
         frittoService.deleteById(id);
         return "redirect:/admin/fritti";
@@ -204,5 +219,26 @@ public class AdminController {
             return "redirect:/admin/fritti?error=upload";
         }
         return "redirect:/admin/fritti";
+    }
+
+    // ── GESTIONE INGREDIENTI ──────────────────────────────────────────
+
+    @GetMapping("/ingredienti")
+    public String gestisciIngredienti(Model model) {
+        model.addAttribute("ingredienti", ingredienteService.findAll());
+        model.addAttribute("ingrediente", new Ingrediente());
+        return "admin/ingredienti";
+    }
+
+    @PostMapping("/ingredienti/add")
+    public String aggiungiIngrediente(@ModelAttribute Ingrediente ingrediente) {
+        ingredienteService.save(ingrediente);
+        return "redirect:/admin/ingredienti";
+    }
+
+    @PostMapping("/ingredienti/delete/{id}")
+    public String eliminaIngrediente(@PathVariable Long id) {
+        ingredienteService.deleteById(id);
+        return "redirect:/admin/ingredienti";
     }
 }
