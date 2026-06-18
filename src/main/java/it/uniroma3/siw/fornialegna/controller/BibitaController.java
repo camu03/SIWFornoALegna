@@ -22,6 +22,7 @@ public class BibitaController {
     @GetMapping("/menu/bibite")
     public List<Bibita> getAllBibite(@RequestParam(required = false, defaultValue = "false") boolean sortedByName,
                                     @RequestParam(required = false, defaultValue = "false") boolean sortedByPrice) {
+
         if (sortedByName) {
             return bibitaService.findAllSortedByNome();
         } else if (sortedByPrice) {

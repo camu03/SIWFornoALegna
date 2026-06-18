@@ -46,8 +46,8 @@ public class SecurityConfig {
                                 "/pizze/immagine/**", "/bibite/immagine/**", "/fritti/immagine/**").permitAll()
                 // Area admin solo per amministratori
                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                // Tutte le altre richieste richiedono autenticazione
-                .anyRequest().authenticated()
+                // Tutto il resto è pubblico (URL sconosciuti mostreranno la pagina 404)
+                .anyRequest().permitAll()
             )
             .formLogin(form -> form
                 .loginPage("/login")
