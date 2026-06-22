@@ -11,6 +11,7 @@
         var selectedState = React.useState(null);
         var selectedItem = selectedState[0]; var setSelectedItem = selectedState[1];
 
+        // Caricamento iniziale: prime 10 per categoria
         React.useEffect(function () {
             fetch('/api/menu')
                 .then(function (r) { return r.json(); })
@@ -18,21 +19,27 @@
                 .catch(function (err) { console.error("Errore nel caricamento:", err); });
         }, []);
 
+        // Ricerca: chiamata al server ogni volta che cambia il testo
+        React.useEffect(function () {
+            if (ricerca === '') {
+                // Torna alle prime 10
+                fetch('/api/menu')
+                    .then(function (r) { return r.json(); })
+                    .then(function (data) { setMenu(data); })
+                    .catch(function (err) { console.error("Errore:", err); });
+            } else {
+                fetch('/api/menu/search?q=' + encodeURIComponent(ricerca))
+                    .then(function (r) { return r.json(); })
+                    .then(function (data) { setMenu(data); })
+                    .catch(function (err) { console.error("Errore ricerca:", err); });
+            }
+        }, [ricerca]);
+
         if (!menu) {
             return e('p', { style: { textAlign: 'center', color: '#666' } }, 'Caricamento menu...');
         }
 
-        function filtra(lista) {
-            if (!ricerca) return lista;
-            return lista.filter(function (item) {
-                return item.nome.toLowerCase().startsWith(ricerca.toLowerCase());
-            });
-        }
-
-        var pizzeFiltrate  = filtra(menu.pizze);
-        var bibiteFiltrate = filtra(menu.bibite);
-        var frittiFiltrati = filtra(menu.fritti);
-        var totale = pizzeFiltrate.length + bibiteFiltrate.length + frittiFiltrati.length;
+        var totale = menu.pizze.length + menu.bibite.length + menu.fritti.length;
 
         function Card(item, tipo) {
             var imgUrl = item.hasImmagine ? ('/' + tipo + '/immagine/' + item.id) : null;
@@ -136,9 +143,9 @@
                         : null
                 )
             ),
-            Sezione('PIZZE', pizzeFiltrate, 'pizze'),
-            Sezione('BIBITE', bibiteFiltrate, 'bibite'),
-            Sezione('FRITTI', frittiFiltrati, 'fritti'),
+            Sezione('PIZZE', menu.pizze, 'pizze'),
+            Sezione('BIBITE', menu.bibite, 'bibite'),
+            Sezione('FRITTI', menu.fritti, 'fritti'),
             modal
         );
     }

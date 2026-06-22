@@ -5,6 +5,7 @@ import it.uniroma3.siw.fornialegna.repository.BibitaRepository;
 import it.uniroma3.siw.fornialegna.repository.FrittoRepository;
 import it.uniroma3.siw.fornialegna.repository.PizzaRepository;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -27,6 +28,7 @@ public class MenuRestController {
         this.frittoRepository = frittoRepository;
     }
 
+    // Caricamento iniziale: prime 10 per categoria
     @GetMapping("/api/menu")
     public Map<String, Object> getMenu() {
         Map<String, Object> result = new LinkedHashMap<>();
@@ -54,6 +56,46 @@ public class MenuRestController {
         }).collect(Collectors.toList()));
 
         result.put("fritti", frittoRepository.findTop10ByOrderByIdAsc().stream().map(f -> {
+            Map<String, Object> m = new HashMap<>();
+            m.put("id", f.getId());
+            m.put("nome", f.getNome());
+            m.put("descrizione", f.getDescrizione());
+            m.put("prezzo", f.getPrezzo());
+            m.put("hasImmagine", f.getImmagine() != null);
+            return m;
+        }).collect(Collectors.toList()));
+
+        return result;
+    }
+
+    // Ricerca su tutto il DB per nome (startsWith)
+    @GetMapping("/api/menu/search")
+    public Map<String, Object> search(@RequestParam("q") String q) {
+        Map<String, Object> result = new LinkedHashMap<>();
+
+        result.put("pizze", pizzaRepository.findByNomeStartingWithIgnoreCase(q).stream().map(p -> {
+            Map<String, Object> m = new HashMap<>();
+            m.put("id", p.getId());
+            m.put("nome", p.getNome());
+            m.put("descrizione", p.getDescrizione());
+            m.put("prezzo", p.getPrezzo());
+            m.put("hasImmagine", p.getImmagine() != null);
+            m.put("ingredienti", p.getIngredienti().stream()
+                    .map(Ingrediente::getNome).collect(Collectors.toList()));
+            return m;
+        }).collect(Collectors.toList()));
+
+        result.put("bibite", bibitaRepository.findByNomeStartingWithIgnoreCase(q).stream().map(b -> {
+            Map<String, Object> m = new HashMap<>();
+            m.put("id", b.getId());
+            m.put("nome", b.getNome());
+            m.put("descrizione", b.getDescrizione());
+            m.put("prezzo", b.getPrezzo());
+            m.put("hasImmagine", b.getImmagine() != null);
+            return m;
+        }).collect(Collectors.toList()));
+
+        result.put("fritti", frittoRepository.findByNomeStartingWithIgnoreCase(q).stream().map(f -> {
             Map<String, Object> m = new HashMap<>();
             m.put("id", f.getId());
             m.put("nome", f.getNome());

@@ -44,7 +44,7 @@ public class SecurityConfig {
                 .requestMatchers("/", "/home", "/menu", "/login", "/register",
                                 "/css/**", "/js/**", "/images/**",
                                 "/pizze/immagine/**", "/bibite/immagine/**", "/fritti/immagine/**",
-                                "/api/menu").permitAll()
+                                "/api/menu", "/api/menu/search").permitAll()
                 // Area admin solo per amministratori
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 // Tutto il resto è pubblico (URL sconosciuti mostreranno la pagina 404)

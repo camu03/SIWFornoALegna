@@ -7,7 +7,5 @@ import java.util.List;
 public interface PizzaRepository extends JpaRepository<Pizza, Long> {   
 
     List<Pizza> findTop10ByOrderByIdAsc();
-    //List<Pizza> findAllByOrderByNomeAsc();
-    // List<Pizza> findAllByOrderByPrezzoAsc();
-    // List<Pizza> findByNomeStartingWithIgnoreCase(String nome);
+    List<Pizza> findByNomeStartingWithIgnoreCase(String nome);
 }
