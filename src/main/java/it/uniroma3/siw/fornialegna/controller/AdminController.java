@@ -34,11 +34,7 @@ public class AdminController {
     }
 
     @GetMapping
-    public String adminDashboard(Model model) {
-        model.addAttribute("totalePizze", pizzaService.count());
-        model.addAttribute("totaleBibite", bibitaService.count());
-        model.addAttribute("totaleFritti", frittoService.count());
-        model.addAttribute("totaleIngredienti", ingredienteService.count());
+    public String adminDashboard() {
         return "admin/dashboard";
     }
 

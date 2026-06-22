@@ -32,16 +32,30 @@
         <div class="container">
             <h2 class="section-title">Pannello Amministratore</h2>
 
-            <div id="admin-dashboard-root"
-                 th:attr="data-pizze-count=${totalePizze}, data-bibite-count=${totaleBibite}, data-fritti-count=${totaleFritti}, data-ingredienti-count=${totaleIngredienti}">
-                <p style="text-align: center; color: #666;">Caricamento dashboard in corso...</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-top: 1rem;">
+                <div class="pizza-card">
+                    <h3 style="color: #c41e3a;">Gestione Pizze</h3>
+                    <p style="color: #666;">Aggiungi, modifica o elimina pizze dal menu.</p>
+                    <a href="/admin/pizze" class="btn-primary" style="display: inline-block; margin-top: 1rem;">Vai alla gestione</a>
+                </div>
+                <div class="pizza-card">
+                    <h3 style="color: #c41e3a;">Gestione Bibite</h3>
+                    <p style="color: #666;">Aggiorna le bibite disponibili e le relative immagini.</p>
+                    <a href="/admin/bibite" class="btn-primary" style="display: inline-block; margin-top: 1rem;">Vai alla gestione</a>
+                </div>
+                <div class="pizza-card">
+                    <h3 style="color: #c41e3a;">Gestione Fritti</h3>
+                    <p style="color: #666;">Organizza i fritti e mantieni il catalogo aggiornato.</p>
+                    <a href="/admin/fritti" class="btn-primary" style="display: inline-block; margin-top: 1rem;">Vai alla gestione</a>
+                </div>
+                <div class="pizza-card">
+                    <h3 style="color: #c41e3a;">Gestione Ingredienti</h3>
+                    <p style="color: #666;">Aggiungi o rimuovi ingredienti da associare alle pizze.</p>
+                    <a href="/admin/ingredienti" class="btn-primary" style="display: inline-block; margin-top: 1rem;">Vai alla gestione</a>
+                </div>
             </div>
         </div>
     </section>
-
-    <script crossorigin="anonymous" src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script crossorigin="anonymous" src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script th:src="@{/js/admin-dashboard-react.js}"></script>
 
     <!-- Footer -->
     <footer>
