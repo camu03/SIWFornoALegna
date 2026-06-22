@@ -31,7 +31,7 @@ public class MenuRestController {
     public Map<String, Object> getMenu() {
         Map<String, Object> result = new LinkedHashMap<>();
 
-        result.put("pizze", pizzaRepository.findAll().stream().map(p -> {
+        result.put("pizze", pizzaRepository.findTop10ByOrderByIdAsc().stream().map(p -> {
             Map<String, Object> m = new HashMap<>();
             m.put("id", p.getId());
             m.put("nome", p.getNome());
@@ -43,7 +43,7 @@ public class MenuRestController {
             return m;
         }).collect(Collectors.toList()));
 
-        result.put("bibite", bibitaRepository.findAll().stream().map(b -> {
+        result.put("bibite", bibitaRepository.findTop10ByOrderByIdAsc().stream().map(b -> {
             Map<String, Object> m = new HashMap<>();
             m.put("id", b.getId());
             m.put("nome", b.getNome());
@@ -53,7 +53,7 @@ public class MenuRestController {
             return m;
         }).collect(Collectors.toList()));
 
-        result.put("fritti", frittoRepository.findAll().stream().map(f -> {
+        result.put("fritti", frittoRepository.findTop10ByOrderByIdAsc().stream().map(f -> {
             Map<String, Object> m = new HashMap<>();
             m.put("id", f.getId());
             m.put("nome", f.getNome());

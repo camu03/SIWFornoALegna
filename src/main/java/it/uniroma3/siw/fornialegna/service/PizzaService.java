@@ -36,14 +36,19 @@ public class PizzaService {
     }
 
     @Transactional(readOnly = true)
+    public List<Pizza> findTop10ByOrderByIdAsc() {
+        return pizzaRepository.findTop10ByOrderByIdAsc();
+    }
+
+    @Transactional(readOnly = true)
     public long count() {
         return pizzaRepository.count();
     }
 
     //metodo ordina cresecente per nome
-    @Transactional(readOnly = true)
+    /*@Transactional(readOnly = true)
     public List<Pizza> findAllByOrderByNomeAsc() {
         return pizzaRepository.findAllByOrderByNomeAsc();
-    }
+    }*/
 
 }

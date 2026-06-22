@@ -36,11 +36,16 @@ public class BibitaService {
     }
 
     @Transactional(readOnly = true)
+    public List<Bibita> findTop10ByOrderByIdAsc() {
+        return bibitaRepository.findTop10ByOrderByIdAsc();
+    }
+
+    @Transactional(readOnly = true)
     public long count() {
         return bibitaRepository.count();
     }
 
-    @Transactional(readOnly = true)
+    /*@Transactional(readOnly = true)
     public List<Bibita> findAllSortedByNome() {
         return bibitaRepository.findAllByOrderByNomeAsc();
     }
@@ -48,5 +53,5 @@ public class BibitaService {
     @Transactional(readOnly = true)
     public List<Bibita> findAllSortedByPrezzo() {
         return bibitaRepository.findAllByOrderByPrezzoAsc();
-    }
+    }*/
 }

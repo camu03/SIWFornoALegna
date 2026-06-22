@@ -32,8 +32,8 @@ public class MenuController {
                         @RequestParam(required = false) boolean sortedByName, 
                         @RequestParam(required = false) boolean sortedByPrice) {
         // Prendo tutti i dati dal database
-        List<Pizza> pizze = pizzaRepository.findAll();
-        List<Bibita> bibite = bibitaRepository.findAll();
+        List<Pizza> pizze = pizzaRepository.findTop10ByOrderByIdAsc();
+        List<Bibita> bibite = bibitaRepository.findTop10ByOrderByIdAsc();
         List<Fritto> fritti = frittoRepository.findAll();
 
         model.addAttribute("search", search);

@@ -21,13 +21,13 @@ public class FrittoController {
     public List<Fritto> getAllFritti(@RequestParam(required = false, defaultValue = "false") boolean sortedByName,
                                     @RequestParam(required = false, defaultValue = "false") boolean sortedByPrice) {
                                     
-        if (sortedByName) {
+        /*if (sortedByName) {
             return frittoService.findAllSortedByNome();
         } else if (sortedByPrice) {
             return frittoService.findAllSortedByPrezzo();
-        } else {                                
+        } else {*/                                
             return frittoService.findAll();
-        }
+        
     }
     
     @GetMapping("/menu/fritti/{id}")

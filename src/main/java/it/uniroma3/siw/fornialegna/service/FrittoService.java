@@ -36,11 +36,16 @@ public class FrittoService {
     }
 
     @Transactional(readOnly = true)
+    public List<Fritto> findTop10ByOrderByIdAsc() {
+        return frittoRepository.findTop10ByOrderByIdAsc();
+    }
+
+    @Transactional(readOnly = true)
     public long count() {
         return frittoRepository.count();
     }
 
-    @Transactional(readOnly = true)
+    /*@Transactional(readOnly = true)
     public List<Fritto> findAllSortedByNome() {
         return frittoRepository.findAllByOrderByNomeAsc();
     }
@@ -48,6 +53,6 @@ public class FrittoService {
     @Transactional(readOnly = true)
     public List<Fritto> findAllSortedByPrezzo() {
         return frittoRepository.findAllByOrderByPrezzoAsc();
-    }
+    }*/
 
 }
