@@ -32,7 +32,7 @@
         <!-- Carrello vuoto -->
         <div th:if="${#lists.isEmpty(carrello.elementiCarrello)}">
             <p>Il carrello è vuoto.</p>
-            <a href="/menu">← Torna al menu</a>
+            <a href="/menu" class="btn-outline">Torna al menu</a>
         </div>
 
         <!-- Elementi del carrello -->
