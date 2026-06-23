@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Il tuo Carrello - Forno a Legna</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="logo"><h1>Forno a Legna - Carrello</h1></div>
+                <ul class="nav-menu">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/menu">Menu</a></li>
+                    <li th:if="${isAuthenticated}">
+                        <form th:action="@{/logout}" method="post" style="display: inline;">
+                            <button type="submit" style="background:none;border:none;color:white;cursor:pointer;font-size:16px;">Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container" style="max-width: 700px; margin: 40px auto;">
+        <h2>Il tuo Carrello</h2>
+
+        <!-- Carrello vuoto -->
+        <div th:if="${#lists.isEmpty(carrello.elementiCarrello)}">
+            <p>Il carrello è vuoto.</p>
+            <a href="/menu">← Torna al menu</a>
+        </div>
+
+        <!-- Elementi del carrello -->
+        <div th:unless="${#lists.isEmpty(carrello.elementiCarrello)}">
+            <table style="width:100%; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th style="text-align:left; padding: 10px; border-bottom: 1px solid #ddd;">Prodotto</th>
+                        <th style="text-align:left; padding: 10px; border-bottom: 1px solid #ddd;">Prezzo</th>
+                        <th style="text-align:left; padding: 10px; border-bottom: 1px solid #ddd;">Quantità</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="elemento : ${carrello.elementiCarrello}">
+                        <!-- Nome prodotto -->
+                        <td style="padding: 10px;" th:if="${elemento.pizza != null}"  th:text="${elemento.pizza.nome}"></td>
+                        <td style="padding: 10px;" th:if="${elemento.bibita != null}" th:text="${elemento.bibita.nome}"></td>
+                        <td style="padding: 10px;" th:if="${elemento.fritto != null}" th:text="${elemento.fritto.nome}"></td>
+
+                        <!-- Prezzo unitario -->
+                        <td style="padding: 10px;" th:if="${elemento.pizza != null}"  th:text="${#numbers.formatDecimal(elemento.pizza.prezzo, 1, 2)} + ' €'"></td>
+                        <td style="padding: 10px;" th:if="${elemento.bibita != null}" th:text="${#numbers.formatDecimal(elemento.bibita.prezzo, 1, 2)} + ' €'"></td>
+                        <td style="padding: 10px;" th:if="${elemento.fritto != null}" th:text="${#numbers.formatDecimal(elemento.fritto.prezzo, 1, 2)} + ' €'"></td>
+
+                        <!-- Quantità -->
+                        <td style="padding: 10px;" th:text="${elemento.quantita}"></td>
+
+                        <!-- Rimuovi -->
+                        <td style="padding: 10px;">
+                            <form th:action="@{/carrello/rimuovi/{id}(id=${elemento.id})}" method="post">
+                                <button type="submit" class="btn-delete" style="border:none; cursor:pointer;">Rimuovi</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Totale -->
+            <div style="text-align: right; margin-top: 20px; font-size: 1.3rem; font-weight: bold;">
+                Totale: <span th:text="${#numbers.formatDecimal(totale, 1, 2)} + ' €'"></span>
+            </div>
+
+            <div style="text-align: left; margin-top: 20px;">
+                <p>Chiama: +39 06 1234567</p>
+                <p>Oppure passaci a trovare: Via Roma 123, 00100 Roma</p>    
+            </div>
+
+            <!-- Azioni -->
+            <div style="margin-top: 20px;">
+                <a href="/menu" class="btn-outline">Continua ad ordinare</a>
+                <form th:action="@{/carrello/svuota}" method="post" style="display: inline; margin-left: 20px;">
+                    <button type="submit" class="btn-delete" style="border:none; cursor:pointer;">Svuota carrello</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Forno a Legna - Tutti i diritti riservati</p>
+        </div>
+    </footer>
+</body>
+</html>

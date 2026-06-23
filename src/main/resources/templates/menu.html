@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forno a Legna - Pizzeria Romana</title>
+    <title>Menu - Forno a Legna</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -13,11 +13,14 @@
         <nav class="navbar">
             <div class="container">
                 <div class="logo">
-                    <h1>Forno a Legna</h1>
+                    <h1>Forno a Legna - Menu</h1>
                 </div>
                 <ul class="nav-menu">
                     <li><a href="/">Home</a></li>
                     <li><a href="/menu" class="active">Menu</a></li>
+                    <li th:if="${isAuthenticated}">
+                        <a href="/carrello">Carrello</a>
+                    </li>
                    
                     
                     <!-- Mostra Login solo se NON autenticato -->
@@ -47,6 +50,10 @@
             </div>
         </nav>
     </header>
+
+    <!-- CSRF token per i form React -->
+    <input type="hidden" id="csrf-token" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <input type="hidden" id="csrf-param" th:value="${_csrf.parameterName}"/>
 
     <!-- Menu React -->
     <div id="menu-react-root"></div>

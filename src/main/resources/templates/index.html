@@ -17,8 +17,9 @@
                 <ul class="nav-menu">
                     <li><a href="/" class="active">Home</a></li>
                     <li><a href="/menu">Menu</a></li>
-                    <li><a href="#chi-siamo">Chi Siamo</a></li>
-                    <li><a href="#contatti">Contatti</a></li>
+                    <li th:if="${isAuthenticated}">
+                        <a href="/carrello">Carrello</a>
+                    </li>
                     
                     <!-- Mostra Login solo se NON autenticato -->
                     <li th:if="${!isAuthenticated}">

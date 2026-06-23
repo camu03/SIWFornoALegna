@@ -1,6 +1,8 @@
 (function () {
     var e = React.createElement;
 
+    var tipoSingolare = { 'pizze': 'pizza', 'bibite': 'bibita', 'fritti': 'fritto' };
+
     function MenuApp() {
         var menuState = React.useState(null);
         var menu = menuState[0]; var setMenu = menuState[1];
@@ -10,6 +12,9 @@
 
         var selectedState = React.useState(null);
         var selectedItem = selectedState[0]; var setSelectedItem = selectedState[1];
+
+        var csrfToken = document.getElementById('csrf-token') ? document.getElementById('csrf-token').value : '';
+        var csrfParam = document.getElementById('csrf-param') ? document.getElementById('csrf-param').value : '_csrf';
 
         // Caricamento iniziale: prime 10 per categoria
         React.useEffect(function () {
@@ -115,10 +120,23 @@
                                             fontSize: '0.85rem', fontStyle: 'italic' } }, ing)
                         : null,
                     e('p', { style: { margin: 0, color: '#666', lineHeight: 1.6 } }, si.descrizione),
+                    e('form', {
+                        method: 'post',
+                        action: '/carrello/aggiungi/' + tipoSingolare[selectedItem.tipo] + '/' + si.id,
+                        style: { marginTop: '1.5rem' }
+                    },
+                        e('input', { type: 'hidden', name: csrfParam, value: csrfToken }),
+                        e('button', {
+                            type: 'submit',
+                            style: { width: '100%', padding: '0.75rem', background: '#c41e3a',
+                                     color: 'white', border: 'none', borderRadius: '5px',
+                                     cursor: 'pointer', fontSize: '1rem', fontWeight: 600 }
+                        }, '+ Aggiungi al carrello')
+                    ),
                     e('button', {
                         onClick: function () { setSelectedItem(null); },
                         className: 'btn-primary',
-                        style: { marginTop: '1.5rem', width: '100%', padding: '0.75rem',
+                        style: { marginTop: '0.75rem', width: '100%', padding: '0.75rem',
                                  border: 'none', cursor: 'pointer', fontSize: '1rem', fontWeight: 600 }
                     }, 'Chiudi')
                 )
