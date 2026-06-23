@@ -59,7 +59,17 @@
                         <td style="padding: 10px;" th:if="${elemento.fritto != null}" th:text="${#numbers.formatDecimal(elemento.fritto.prezzo, 1, 2)} + ' €'"></td>
 
                         <!-- Quantità -->
-                        <td style="padding: 10px;" th:text="${elemento.quantita}"></td>
+                        <td style="padding: 10px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <form th:action="@{/carrello/decrementa/{id}(id=${elemento.id})}" method="post" style="margin:0;">
+                                    <button type="submit" class="btn-outline" style="padding: 4px 10px; font-size: 1rem; line-height:1;">−</button>
+                                </form>
+                                <span th:text="${elemento.quantita}" style="min-width: 20px; text-align: center;"></span>
+                                <form th:action="@{/carrello/incrementa/{id}(id=${elemento.id})}" method="post" style="margin:0;">
+                                    <button type="submit" class="btn-outline" style="padding: 4px 10px; font-size: 1rem; line-height:1;">+</button>
+                                </form>
+                            </div>
+                        </td>
 
                         <!-- Rimuovi -->
                         <td style="padding: 10px;">

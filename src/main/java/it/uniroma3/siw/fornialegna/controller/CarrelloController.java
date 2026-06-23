@@ -43,6 +43,18 @@ public class CarrelloController {
         return "redirect:/menu";
     }
 
+    @PostMapping("/incrementa/{id}")
+    public String incrementaElemento(@PathVariable Long id) {
+        carrelloService.incrementaElemento(id);
+        return "redirect:/carrello";
+    }
+
+    @PostMapping("/decrementa/{id}")
+    public String decrementaElemento(@PathVariable Long id) {
+        carrelloService.decrementaElemento(id);
+        return "redirect:/carrello";
+    }
+
     @PostMapping("/rimuovi/{id}")
     public String rimuoviElemento(@PathVariable Long id) {
         carrelloService.rimuoviElemento(id);

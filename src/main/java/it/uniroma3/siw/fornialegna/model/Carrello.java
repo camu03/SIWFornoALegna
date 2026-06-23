@@ -13,6 +13,7 @@ public class Carrello {
     private User user;
 
     @OneToMany(mappedBy = "carrello", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("id ASC")
     private List<ElementoCarrello> elementiCarrello = new ArrayList<>();
 
     public Long getId() { return id; }

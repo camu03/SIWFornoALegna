@@ -96,6 +96,26 @@ public class CarrelloService {
     }
 
     @Transactional
+    public void incrementaElemento(Long elementoId) {
+        ElementoCarrello elemento = elementoCarrelloRepository.findById(elementoId).orElse(null);
+        if (elemento == null) return;
+        elemento.setQuantita(elemento.getQuantita() + 1);
+        elementoCarrelloRepository.save(elemento);
+    }
+
+    @Transactional
+    public void decrementaElemento(Long elementoId) {
+        ElementoCarrello elemento = elementoCarrelloRepository.findById(elementoId).orElse(null);
+        if (elemento == null) return;
+        if (elemento.getQuantita() <= 1) {
+            elementoCarrelloRepository.delete(elemento);
+        } else {
+            elemento.setQuantita(elemento.getQuantita() - 1);
+            elementoCarrelloRepository.save(elemento);
+        }
+    }
+
+    @Transactional
     public void rimuoviElemento(Long elementoId) {
         elementoCarrelloRepository.deleteById(elementoId);
     }
