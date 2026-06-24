@@ -1,6 +1,7 @@
 package it.uniroma3.siw.fornialegna.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Positive;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,13 +20,13 @@ public class Pizza {
     private String descrizione;
 
     @Column(nullable = false)
+    @Positive(message = "Il prezzo deve essere maggiore di zero")
     private Double prezzo;
 
-    @Lob
     @Column(name = "immagine", columnDefinition = "bytea")
     private byte[] immagine;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "pizza_ingredienti",
         joinColumns = @JoinColumn(name = "pizza_id"),
         inverseJoinColumns = @JoinColumn(name = "ingrediente_id"))

@@ -31,6 +31,9 @@
             <!-- Form Aggiungi Pizza -->
             <div class="admin-form-container">
                 <h3>Aggiungi Nuova Pizza</h3>
+                <div th:if="${param.error != null}" style="color: #c41e3a; background: #ffeaea; border: 1px solid #c41e3a; border-radius: 5px; padding: 10px; margin-bottom: 15px;">
+                    Il prezzo deve essere maggiore di zero.
+                </div>
                 <form th:action="@{/admin/pizze/add}" method="post" th:object="${pizza}" 
                       class="admin-form" enctype="multipart/form-data">
                     <div class="form-group">
@@ -110,7 +113,7 @@
                                     </button>
                                 </form>
                                 <button class="btn-edit"
-                                        th:attr="data-id=${pizza.id}, data-nome=${pizza.nome}, data-descrizione=${pizza.descrizione}, data-prezzo=${pizza.prezzo}, data-ingredienti=${#strings.listJoin(pizza.ingredienti.![id], ',')}"
+                                        th:attr="data-id=${pizza.id}, data-nome=${pizza.nome}, data-descrizione=${pizza.descrizione}, data-prezzo=${pizza.prezzo}, data-ingredienti=${#strings.listJoin(pizza.ingredienti.![id], ',')}, data-has-immagine=${pizza.immagine != null}"
                                         onclick="openEditModal(this)">
                                     Modifica
                                 </button>
@@ -150,6 +153,13 @@
                     <small style="color: #666;">Lascia vuoto per mantenere l'immagine attuale</small>
                 </div>
 
+                <div class="form-group" id="rimuoviImmagineDiv" style="display:none;">
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input type="checkbox" name="rimuoviImmagine" value="true">
+                        Rimuovi immagine attuale
+                    </label>
+                </div>
+
                 <div class="form-group">
                     <label>Ingredienti</label>
                     <details style="margin-top: 8px; border: 1px solid #ddd; border-radius: 5px;">
@@ -186,10 +196,14 @@
             var ingredientiRaw = button.getAttribute('data-ingredienti') || '';
             var ingredientiIds = ingredientiRaw.split(',').filter(function(s) { return s !== ''; });
 
+            var hasImmagine = button.getAttribute('data-has-immagine') === 'true';
+
             document.getElementById('editId').value = id;
             document.getElementById('editNome').value = nome;
             document.getElementById('editDescrizione').value = descrizione;
             document.getElementById('editPrezzo').value = prezzo;
+            document.getElementById('rimuoviImmagineDiv').style.display = hasImmagine ? 'block' : 'none';
+            document.querySelector('#rimuoviImmagineDiv input[type=checkbox]').checked = false;
 
             // reset checkbox
             document.querySelectorAll('.ingrediente-check').forEach(function(cb) {

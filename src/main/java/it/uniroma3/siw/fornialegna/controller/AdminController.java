@@ -2,8 +2,10 @@ package it.uniroma3.siw.fornialegna.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import jakarta.validation.Valid;
 import it.uniroma3.siw.fornialegna.model.Pizza;
 import it.uniroma3.siw.fornialegna.model.Bibita;
 import it.uniroma3.siw.fornialegna.model.Fritto;
@@ -49,9 +51,13 @@ public class AdminController {
     }
 
     @PostMapping("/pizze/add")
-    public String aggiungiPizza(@ModelAttribute Pizza pizza,
+    public String aggiungiPizza(@Valid @ModelAttribute Pizza pizza,
+                                BindingResult bindingResult,
                                 @RequestParam(value = "file", required = false) MultipartFile file,
                                 @RequestParam(value = "ingredientiIds", required = false) List<Long> ingredientiIds) {
+        if (bindingResult.hasErrors()) {
+            return "redirect:/admin/pizze?error=prezzo";
+        }
         try {
             if (file != null && !file.isEmpty()) {
                 pizza.setImmagine(file.getBytes());
@@ -79,7 +85,11 @@ public class AdminController {
                                 @RequestParam String descrizione,
                                 @RequestParam Double prezzo,
                                 @RequestParam(value = "file", required = false) MultipartFile file,
-                                @RequestParam(value = "ingredientiIds", required = false) List<Long> ingredientiIds) {
+                                @RequestParam(value = "ingredientiIds", required = false) List<Long> ingredientiIds,
+                                @RequestParam(value = "rimuoviImmagine", required = false) boolean rimuoviImmagine) {
+        if (prezzo == null || prezzo <= 0) {
+            return "redirect:/admin/pizze?error=prezzo";
+        }
         try {
             Pizza pizza = pizzaService.findById(id);
             if (pizza == null) return "redirect:/admin/pizze?error=notfound";
@@ -88,7 +98,9 @@ public class AdminController {
             pizza.setDescrizione(descrizione);
             pizza.setPrezzo(prezzo);
 
-            if (file != null && !file.isEmpty()) {
+            if (rimuoviImmagine) {
+                pizza.setImmagine(null);
+            } else if (file != null && !file.isEmpty()) {
                 pizza.setImmagine(file.getBytes());
             }
 
@@ -115,8 +127,12 @@ public class AdminController {
     }
 
     @PostMapping("/bibite/add")
-    public String aggiungiBibita(@ModelAttribute Bibita bibita,
+    public String aggiungiBibita(@Valid @ModelAttribute Bibita bibita,
+                                 BindingResult bindingResult,
                                  @RequestParam(value = "file", required = false) MultipartFile file) {
+        if (bindingResult.hasErrors()) {
+            return "redirect:/admin/bibite?error=prezzo";
+        }
         try {
             if (file != null && !file.isEmpty()) {
                 bibita.setImmagine(file.getBytes());
@@ -140,7 +156,11 @@ public class AdminController {
                                  @RequestParam String nome,
                                  @RequestParam String descrizione,
                                  @RequestParam Double prezzo,
-                                 @RequestParam(value = "file", required = false) MultipartFile file) {
+                                 @RequestParam(value = "file", required = false) MultipartFile file,
+                                 @RequestParam(value = "rimuoviImmagine", required = false) boolean rimuoviImmagine) {
+        if (prezzo == null || prezzo <= 0) {
+            return "redirect:/admin/bibite?error=prezzo";
+        }
         try {
             Bibita bibita = bibitaService.findById(id);
             if (bibita == null) return "redirect:/admin/bibite?error=notfound";
@@ -149,7 +169,9 @@ public class AdminController {
             bibita.setDescrizione(descrizione);
             bibita.setPrezzo(prezzo);
 
-            if (file != null && !file.isEmpty()) {
+            if (rimuoviImmagine) {
+                bibita.setImmagine(null);
+            } else if (file != null && !file.isEmpty()) {
                 bibita.setImmagine(file.getBytes());
             }
 
@@ -171,8 +193,12 @@ public class AdminController {
     }
 
     @PostMapping("/fritti/add")
-    public String aggiungiFritto(@ModelAttribute Fritto fritto,
+    public String aggiungiFritto(@Valid @ModelAttribute Fritto fritto,
+                                 BindingResult bindingResult,
                                  @RequestParam(value = "file", required = false) MultipartFile file) {
+        if (bindingResult.hasErrors()) {
+            return "redirect:/admin/fritti?error=prezzo";
+        }
         try {
             if (file != null && !file.isEmpty()) {
                 fritto.setImmagine(file.getBytes());
@@ -196,7 +222,11 @@ public class AdminController {
                                  @RequestParam String nome,
                                  @RequestParam String descrizione,
                                  @RequestParam Double prezzo,
-                                 @RequestParam(value = "file", required = false) MultipartFile file) {
+                                 @RequestParam(value = "file", required = false) MultipartFile file,
+                                 @RequestParam(value = "rimuoviImmagine", required = false) boolean rimuoviImmagine) {
+        if (prezzo == null || prezzo <= 0) {
+            return "redirect:/admin/fritti?error=prezzo";
+        }
         try {
             Fritto fritto = frittoService.findById(id);
             if (fritto == null) return "redirect:/admin/fritti?error=notfound";
@@ -205,7 +235,9 @@ public class AdminController {
             fritto.setDescrizione(descrizione);
             fritto.setPrezzo(prezzo);
 
-            if (file != null && !file.isEmpty()) {
+            if (rimuoviImmagine) {
+                fritto.setImmagine(null);
+            } else if (file != null && !file.isEmpty()) {
                 fritto.setImmagine(file.getBytes());
             }
 

@@ -1,6 +1,7 @@
 package it.uniroma3.siw.fornialegna.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Positive;
 
 @Entity
 @Table(name = "bibite")
@@ -17,10 +18,10 @@ public class Bibita {
     private String descrizione;
 
     @Column(nullable = false)
+    @Positive(message = "Il prezzo deve essere maggiore di zero")
     private Double prezzo;
 
-    @Lob
-    @Column(name = "immagine")
+    @Column(name = "immagine", columnDefinition = "bytea")
     private byte[] immagine;
 
     // Costruttori
